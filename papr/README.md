@@ -50,8 +50,18 @@ $ oc new-app --file papr-jenkins.yaml \
 
 Note that modifications to Jenkins configurations fed to the S2I builder will
 probably require that you delete and recreate the PVC so that old configurations
-don't override new ones (I find it easier to just `oc delete project papr` and
-recreate it; the builder image is cached in the `openshift` namespace).
+don't override new ones:
+
+
+```
+$ oc delete pvc jenkins
+$ oc new-app ... # as above
+<errors about existing objects, but recreates pvc>
+# if modifications require a new Jenkins image:
+$ oc start-build papr-jenkins
+# otherwise, to reuse the latest image built
+$ oc rollout latest dc/jenkins
+```
 
 # Using webhooks locally
 

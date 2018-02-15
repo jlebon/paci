@@ -254,7 +254,7 @@ objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: jenkins-job-builder
+    name: job-builder
   triggers:
   - type: GitHub
     github:
