@@ -1,0 +1,13 @@
+// XXX: extend openshift/jenkins S2I builder so we can easily bake custom cloud
+// configs in config.xml.tpl so we don't need to `podTemplate` each time
+podTemplate(label: 'papr-slave', cloud: 'openshift', containers: [
+    containerTemplate(name: 'jnlp', image: 'papr/papr-slave:latest',
+                      args: '${computer.jnlpmac} ${computer.name}')
+    ]) {
+
+    node('papr-slave') {
+      checkout scm
+      sh "ls -la"
+      sh "jenkins-jobs --version"
+    }
+}
