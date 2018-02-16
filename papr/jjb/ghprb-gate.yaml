@@ -18,11 +18,10 @@
       - github-pull-request:
 
           github-hooks: true
-          auth-id: '{ghprb-auth-id}'
+          auth-id: '7a64217f-077c-4fde-a9a3-fd0ae37d4e0a'
 
-          admin-list: [ '{admin-list}' ]
           white-list: [ '{white-list}' ]
-          org-list: [ 'projectatomic openshift' ]
+          org-list: [ 'projectatomic openshift flatpak ostreedev' ]
           allow-whitelist-orgs-as-admins: true
 
           # This doesn't actually matter since we don't do any status updates
@@ -57,15 +56,16 @@
         - 'ghprb-gate-{ghowner}-{ghrepo}'
 
 # Sigh, because of the whitelist issue, we can't collapse these and just
-# enumerate on the ghrepo.
+# enumerate on the ghrepo:
+#
+# https://github.com/jenkinsci/ghprb-plugin/issues/382
+#
+# The whitelist files in this repo get populated by a Groovy script during job
+# redefinitions.
 
 - project:
     jobs: [ ghprb-gate-jobs ]
     name: jlebon-papr-sandbox-gate
     ghowner: jlebon
     ghrepo: papr-sandbox
-    admin-list: jlebon
-    ghprb-auth-id: '52f6a29f-4bec-42ad-a560-8b5d3b1b1420' # papr-bot
-    # This file gets populated by a Groovy script in the service job. XXX: This
-    # really needs to die: https://github.com/jenkinsci/ghprb-plugin/issues/382
     white-list: !include-raw: ghprb-gate-jlebon-papr-sandbox.whitelist
