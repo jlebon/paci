@@ -14,4 +14,5 @@ podTemplate(label: 'papr-slave', cloud: 'openshift', containers: [
             sh 'jenkins-jobs --conf papr/jjb/config --password $JJB_PASSWORD ' \
                '  update papr/jjb'
         }
+    }
 }
