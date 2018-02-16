@@ -10,9 +10,8 @@ podTemplate(label: 'papr-slave', cloud: 'openshift', containers: [
     node('papr-slave') {
         checkout scm
         withCredentials([string(credentialsId: 'jenkins-job-builder',
-                                variable: 'JJB_PASSWORD')]) {
-            sh 'jenkins-jobs --conf papr/jjb/config --password $JJB_PASSWORD ' \
-               '  update papr/jjb'
+                                variable: 'PASSWD')]) {
+            sh 'jenkins-jobs --conf papr/jjb/config -p $PASSWD update papr/jjb'
         }
     }
 }
