@@ -84,11 +84,20 @@ def generate_papr_pod(args):
                     # registry clusterIP, e.g. 172.30.1.1:5000
                     "image": "docker-registry.default.svc:5000/projectatomic-ci/papr",
                     "imagePullPolicy": "Always",
-                    "args": ["--debug", "runtest", "--conf",
-                             "/etc/papr/config", "--repo", args.repo],
                     "securityContext": {
                         "runAsUser": 0
                     },
+                    "command": ["sh", "-c", '''
+                                cd /var/tmp
+                                git clone -b ocp \
+                                    -c user.name=papr \
+                                    -c user.email=papr@example.com \
+                                    https://github.com/projectatomic/papr
+                                pip3 install -I /var/tmp/papr
+                                papr "$@"
+                                '''],
+                    "args": ["papr", "--debug", "runtest", "--conf",
+                             "/etc/papr/config", "--repo", args.repo],
                     # XXX: pvc for git checkout caches (but need to add locking)
                     "env": [
                         {
